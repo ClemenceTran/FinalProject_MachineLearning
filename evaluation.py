@@ -5,7 +5,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from tqdm import tqdm
 
 # CONFIG
-MODEL_DIR = "distilgpt2"   #"distilgpt2" for baseline and "fine_tuned_model" for train model
+MODEL_DIR = "fine_tuned_model"   #"distilgpt2" for baseline and "fine_tuned_model" for train model
 VAL_FILE = "data/val.jsonl"
 TEST_PROMPTS_FILE = "data/test_prompts.jsonl"
 
@@ -76,7 +76,7 @@ def generate_test_outputs():
                 "generation": text
             })
 
-    with open("outputs/evaluation_baseline.jsonl", "w", encoding="utf-8") as f: #where's the file
+    with open("outputs/evaluation_finetuned.jsonl", "w", encoding="utf-8") as f: #where's the file
         for item in generations:
             f.write(json.dumps(item, ensure_ascii=False) + "\n")
 
