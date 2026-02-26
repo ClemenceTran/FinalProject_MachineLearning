@@ -5,17 +5,10 @@
     The project compares a baseline pretrained model against a fine-tuned model using both automatic and human evaluation.
 
 # How to run ? 
-    ## Install Dependencies: 
-    ### pip install -r requirements.txt
-
-    ## Preprocess Dataset: 
-    ### python preprocess.py        or      python3 preprocess.py
-
-    - Train the Model: 
-    python train.py             or      python3 train.py
-
-    - Run the Demo Application
-    streamlit run demoapp.py
+    ## Install Dependencies: pip install -r requirements.txt
+    ## Preprocess Dataset: python preprocess.py        or      python3 preprocess.py
+    ## Train the Model: python train.py             or      python3 train.py
+    ## Run the Demo Application: streamlit run demoapp.py
 
     * The demo contains: Select model (Baseline or Fine-Tuned), Choose Level, Setting, Tone, Length, Provide additional quest instructions, Generate a fantasy quest.
 
