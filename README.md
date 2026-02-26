@@ -12,8 +12,8 @@
 
     * The demo contains: Select model (Baseline or Fine-Tuned), Choose Level, Setting, Tone, Length, Provide additional quest instructions, Generate a fantasy quest.
 
-3. Results Summary
-    - Automatic Evaluation Results
+# Results Summary
+    ##Automatic Evaluation Results
     | Model                 | Validation Loss | Perplexity | Distinct-1 | Distinct-2 |
     | Baseline (DistilGPT2) | 3.1764          | 23.96      | 0.2708     | 0.7762     |
     | Fine-Tuned            | 1.4080          | 4.09       | 0.1528     | 0.5140     |
@@ -22,6 +22,7 @@
 
     - Human Evaluation Results
     | Model                 | Coherence (1–5) | Faithfulness (1–5) | Creativity (1–5) |
+    |-----------------------|-----------------|--------------------|------------------|
     | Baseline (DistilGPT2) | 1.0             | 1.0                | 1.0              |
     | Fine-Tuned            | 3.0             | 2.0                | 2.0              |
 
