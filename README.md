@@ -13,14 +13,15 @@
     * The demo contains: Select model (Baseline or Fine-Tuned), Choose Level, Setting, Tone, Length, Provide additional quest instructions, Generate a fantasy quest.
 
 # Results Summary
-    ##Automatic Evaluation Results
+    ## Automatic Evaluation Results
     | Model                 | Validation Loss | Perplexity | Distinct-1 | Distinct-2 |
+    |-----------------------|-----------------|------------|------------|------------|
     | Baseline (DistilGPT2) | 3.1764          | 23.96      | 0.2708     | 0.7762     |
     | Fine-Tuned            | 1.4080          | 4.09       | 0.1528     | 0.5140     |
     
     => The fine-tuned model greatly reduces perplexity compared to the baseline, showing improved coherence and dataset alignment. Although diversity slightly decreases, the generated quests are more structured and consistent.
 
-    - Human Evaluation Results
+    ## Human Evaluation Results
     | Model                 | Coherence (1–5) | Faithfulness (1–5) | Creativity (1–5) |
     |-----------------------|-----------------|--------------------|------------------|
     | Baseline (DistilGPT2) | 1.0             | 1.0                | 1.0              |
