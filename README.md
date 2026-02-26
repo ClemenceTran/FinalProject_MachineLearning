@@ -1,18 +1,15 @@
 # FinalProject_MachineLearning
-1. Summary
-    Using DistilGPT2, QuestCrafter is a controllable text generating system that has been refined to produce fantasy quests based on structured control tokens:
-    <LEVEL>
-    <CONFIGURING>
-    <TONE>
-    <LENGTH>
+# Summary
+    Using DistilGPT2, QuestCrafter is a controllable text generating system that has been refined to produce fantasy quests based on structured control tokens
+    <LEVEL> <CONFIGURING> <TONE> <LENGTH>
     The project compares a baseline pretrained model against a fine-tuned model using both automatic and human evaluation.
 
-2. How to run ? 
-    - Install Dependencies: 
-    pip install -r requirements.txt
+# How to run ? 
+    ## Install Dependencies: 
+    ### pip install -r requirements.txt
 
-    - Preprocess Dataset: 
-    python preprocess.py        or      python3 preprocess.py
+    ## Preprocess Dataset: 
+    ### python preprocess.py        or      python3 preprocess.py
 
     - Train the Model: 
     python train.py             or      python3 train.py
