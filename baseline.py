@@ -16,11 +16,10 @@ TEMPERATURE = 0.9
 TOP_P = 0.95
 REPETITION_PENALTY = 1.1
 
-# If you want deterministic generations, set DO_SAMPLE=False and remove temperature/top_p.
 DO_SAMPLE = True
 SEED = 42
 
-# ------------------ DEVICE ------------------
+# DEVICE
 def pick_device() -> str:
     if torch.cuda.is_available():
         return "cuda"
