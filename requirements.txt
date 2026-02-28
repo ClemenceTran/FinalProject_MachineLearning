@@ -4,3 +4,5 @@ datasets
 streamlit
 scikit-learn
 tqdm
+huggingface_hub
+tokenizers
