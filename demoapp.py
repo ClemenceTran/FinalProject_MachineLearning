@@ -2,7 +2,16 @@ import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# DEVICE 
+# CONFIG
+HF_REPO_ID = "clemencetran/questcrafter-finetuned"
+HF_SUBFOLDER = "fine_tuned_model" 
+
+SETTINGS = ["forest", "desert city", "mountain village", "ancient ruins", "seaside town"]
+TONES = ["epic", "dark", "mysterious", "humorous", "adventurous"]
+LEVELS = list(range(1, 11))
+LENGTHS = ["short", "medium"]
+
+# DEVICE
 def pick_device():
     if torch.cuda.is_available():
         return "cuda"
@@ -12,19 +21,37 @@ def pick_device():
 
 DEVICE = pick_device()
 
-# MODEL LOADER 
+# MODEL LOADER
 @st.cache_resource
-def load_model(model_name_or_path: str):
-    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
-    model = AutoModelForCausalLM.from_pretrained(model_name_or_path).to(DEVICE)
+def load_model(model_choice: str):
+    """
+    Loads either:
+      - Fine-Tuned from your Hugging Face repo subfolder
+      - Baseline from 'distilgpt2'
+    """
+    if model_choice == "Fine-Tuned":
+        model_id = HF_REPO_ID
+        tok_kwargs = {"subfolder": HF_SUBFOLDER}
+        mdl_kwargs = {"subfolder": HF_SUBFOLDER}
+    else:
+        model_id = "distilgpt2"
+        tok_kwargs = {}
+        mdl_kwargs = {}
+
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True, **tok_kwargs)
+    except Exception:
+        tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=False, **tok_kwargs)
+
+    model = AutoModelForCausalLM.from_pretrained(model_id, **mdl_kwargs).to(DEVICE)
     model.eval()
 
-    if tokenizer.pad_token_id is None:
+    if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
     return tokenizer, model
 
-# PROMPT
+# PROMPT HELPERS
 def build_prompt(level: int, setting: str, tone: str, length: str, user_request: str) -> str:
     user_request = (user_request or "").strip()
     extra = f" {user_request}" if user_request else ""
@@ -35,38 +62,37 @@ def build_prompt(level: int, setting: str, tone: str, length: str, user_request:
     )
 
 def extract_quest_only(prompt: str, decoded_text: str) -> str:
+    decoded_text = decoded_text.strip()
     if decoded_text.startswith(prompt):
         return decoded_text[len(prompt):].lstrip()
-    return decoded_text.strip()
+    return decoded_text
 
 # UI
 st.set_page_config(page_title="QuestCrafter", page_icon="🧙")
 st.title("QuestCrafter – AI Dungeon Master")
+st.caption(f"Device: {DEVICE}")
 
-model_choice = st.selectbox("Model", ["Fine-Tuned Model", "Baseline (distilgpt2)"])
-MODEL_DIR = "fine_tuned_model" if model_choice == "Fine-Tuned Model" else "distilgpt2"
+model_choice = st.selectbox("Model", ["Fine-Tuned", "Baseline"])
 
-level = st.selectbox("Level", list(range(1, 11)), index=4)  # default 5
-setting = st.selectbox(
-    "Setting",
-    ["forest", "desert city", "mountain village", "ancient ruins", "seaside town"],
-    index=0
-)
-tone = st.selectbox("Tone", ["epic", "dark", "mysterious", "humorous", "adventurous"], index=2)
-length = st.selectbox("Length", ["short", "medium"], index=0)
+level = st.selectbox("Level", LEVELS, index=4)
+setting = st.selectbox("Setting", SETTINGS, index=0)
+tone = st.selectbox("Tone", TONES, index=2)
+length = st.selectbox("Length", LENGTHS, index=0)
 
 user_request = st.text_area(
-    "What quest do you want?",
-    "Create a level-3 quest in a desert city with a betrayal twist."
+    "Additional quest instructions (optional)",
+    "Create a quest with a betrayal twist."
 )
 
 max_new_tokens = st.slider("Max new tokens", 50, 300, 160, step=10)
 
-tokenizer, model = load_model(MODEL_DIR)
+tokenizer, model = load_model(model_choice)
 
 if st.button("Generate Quest", type="primary"):
     prompt = build_prompt(level, setting, tone, length, user_request)
-    inputs = tokenizer(prompt, return_tensors="pt").to(DEVICE)
+
+    inputs = tokenizer(prompt, return_tensors="pt")
+    inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
 
     with torch.no_grad():
         out = model.generate(
@@ -77,7 +103,8 @@ if st.button("Generate Quest", type="primary"):
             top_p=0.9,
             repetition_penalty=1.15,
             no_repeat_ngram_size=3,
-            pad_token_id=tokenizer.eos_token_id
+            pad_token_id=tokenizer.eos_token_id,
+            eos_token_id=tokenizer.eos_token_id,
         )
 
     decoded = tokenizer.decode(out[0], skip_special_tokens=True)
