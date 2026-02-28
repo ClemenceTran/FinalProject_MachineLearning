@@ -1,7 +1,9 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-MODEL_DIR = "fine_tuned_model"
+# Correct repo + subfolder
+MODEL_ID = "clemencetran/questcrafter-finetuned"
+SUBFOLDER = "fine_tuned_model"
 
 def pick_device():
     if torch.cuda.is_available():
@@ -13,8 +15,18 @@ def pick_device():
 device = pick_device()
 print("Using device:", device)
 
-tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
-model = AutoModelForCausalLM.from_pretrained(MODEL_DIR).to(device)
+# IMPORTANT: include subfolder
+tokenizer = AutoTokenizer.from_pretrained(
+    MODEL_ID,
+    subfolder=SUBFOLDER,
+    use_fast=False   # safer
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_ID,
+    subfolder=SUBFOLDER
+).to(device)
+
 model.eval()
 
 prompt = "<LEVEL=5> <SETTING=forest> <TONE=dark> <LENGTH=short> Write a fantasy quest story."
