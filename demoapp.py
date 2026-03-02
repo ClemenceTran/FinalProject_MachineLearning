@@ -80,8 +80,8 @@ tone = st.selectbox("Tone", TONES, index=2)
 length = st.selectbox("Length", LENGTHS, index=0)
 
 user_request = st.text_area(
-    "Additional quest instructions (optional)",
-    "Create a quest with a betrayal twist."
+    "Additional quest instructions",
+    "Write a fantasy quest story."
 )
 
 max_new_tokens = st.slider("Max new tokens", 50, 300, 160, step=10)
