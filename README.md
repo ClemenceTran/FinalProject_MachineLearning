@@ -6,8 +6,8 @@
 
 # How to run ? 
     ## Install Dependencies: pip install -r requirements.txt
-    ## Check evaluation for baseline model: python evaluate_baseline.py        or      python3 evaluation_baseline.py
-    ## Check evaluation for finetuned model: python evaluate_finetuned.py        or      python3 evaluation_finetuned.py
+    ## Check evaluation for baseline model: python evaluation_baseline.py        or      python3 evaluation_baseline.py
+    ## Check evaluation for finetuned model: python evaluation_finetuned.py        or      python3 evaluation_finetuned.py
     ## Run the Demo Application: streamlit run demoapp.py
 
     * The demo contains: Select model (Baseline or Fine-Tuned), Choose Level, Setting, Tone, Length, Provide additional quest instructions, Generate a fantasy quest.
